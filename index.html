@@ -2,7 +2,6 @@
 <html>
 <head>
     <base href="/">
-
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,17 +32,15 @@
         body {
           margin: 0;
           min-height: 100%;
-          background-color: #000000;
+          background-color: #FFFFFF;
           background-size: 100% 100%;
           display: flex;
           justify-content: center;
           align-items: center;
         }
-
         .splash-logo {
           display: block;
         }
-
         @media (max-width: 768px) {
           .splash-logo {
             width: calc(100% - 30px);
@@ -94,10 +91,13 @@
       console.log("🚀 Starting Flutter...");
 
       _flutter.loader.load({
-        serviceWorker: { serviceWorkerVersion: '"3261286785"' },
+        serviceWorker: { serviceWorkerVersion: '"2505701147"' },
         onLoad: function (engineInitializer) {
           engineInitializer.initializeEngine({ renderer: "canvaskit" })
-            .then((appRunner) => appRunner.runApp());
+            .then((appRunner) => {
+              removeSplashFromWeb(); // ✅ This is the missing call!
+              appRunner.runApp();
+            });
         }
       });
     });
