@@ -98,48 +98,58 @@
 <!--</html>-->
 
 
-
 <!DOCTYPE html>
 <html>
 <head>
     <base href="/">
     <meta charset="UTF-8">
-    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="A new Flutter project.">
+
     <!-- iOS meta tags & icons -->
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="FML-Food Music Love">
     <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png"/>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDICPC3V8tUyY8SZ9aCIJD8cw9Vox8EdSs&libraries=places" async defer></script>
-    <title>FML-Food Music Love</title>
+
+    <!-- Manifest -->
     <link rel="manifest" href="manifest.json">
-    <script>const serviceWorkerVersion = "3543515428";</script>
+
+    <!-- Google Maps (optional, keep async defer) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDICPC3V8tUyY8SZ9aCIJD8cw9Vox8EdSs&libraries=places" async defer></script>
+
+    <!-- JS libraries (QR scanner) -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js" defer></script>
+
+    <title>FML-Food Music Love</title>
+
+    <!-- Flutter bootstrap -->
     <script src="flutter.js" defer></script>
+    <script>
+        const serviceWorkerVersion = "2745610668";
+        let useHtml = true;
+
+        window.addEventListener('load', function () {
+          _flutter.loader.loadEntrypoint({
+            serviceWorker: {
+              serviceWorkerVersion: serviceWorkerVersion,
+            },
+            onEntrypointLoaded: function (engineInitializer) {
+              engineInitializer.initializeEngine({
+                renderer: useHtml ? "html" : "canvaskit"
+              }).then(function (appRunner) {
+                appRunner.runApp();
+              });
+            }
+          });
+        });
+    </script>
 </head>
 <body>
-<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
-<script>
-    let useHtml = true;
-
-    window.addEventListener('load', function(ev) {
-    _flutter.loader.loadEntrypoint({
-      serviceWorker: {
-        serviceWorkerVersion: serviceWorkerVersion,
-      },
-      onEntrypointLoaded: function(engineInitializer) {
-        let config = {
-          renderer: useHtml ? "html" : "canvaskit",
-        };
-        engineInitializer.initializeEngine(config).then(function(appRunner) {
-          appRunner.runApp();
-        });
-       }
-      });
-     });
-</script>
-<script src="main.dart.js" type="application/javascript"></script>
+<!-- Flutter injects canvas/app here -->
 </body>
 </html>
