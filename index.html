@@ -1,104 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <base href="/">
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A new Flutter project.">
-
-    <!-- iOS meta tags & icons -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="FML-Food Music Love">
-    <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png">
-
-    <!-- Manifest -->
-    <link rel="manifest" href="manifest.json">
-
-    <!-- Scripts -->
     <script src="flutter.js" defer></script>
-    <script src="flutter_bootstrap.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js" defer></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDICPC3V8tUyY8SZ9aCIJD8cw9Vox8EdSs&libraries=places" defer></script>
-
-    <title>FML-Food Music Love</title>
-
-    <style id="splash-screen-style">
-        html { height: 100%; }
-        body {
-          margin: 0;
-          min-height: 100%;
-          background-color: #FFFFFF;
-          background-size: 100% 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        .splash-logo {
-          display: block;
-        }
-        @media (max-width: 768px) {
-          .splash-logo {
-            width: calc(100% - 30px);
-            max-width: 350px;
-            height: auto;
-          }
-        }
-    </style>
+    <title>Flutter Web Test</title>
 </head>
 <body>
-<picture id="splash">
-    <source srcset="splash/img/light-1x.png 1x, splash/img/light-2x.png 2x, splash/img/light-3x.png 3x, splash/img/light-4x.png 4x"
-            media="(prefers-color-scheme: light)">
-    <source srcset="splash/img/dark-1x.png 1x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x"
-            media="(prefers-color-scheme: dark)">
-    <img class="splash-logo" aria-hidden="true" src="splash/img/light-1x.png" alt="">
-</picture>
-
 <script>
-    function removeSplashFromWeb() {
-      document.getElementById("splash")?.remove();
-      document.body.style.background = "transparent";
-    }
-
-    async function registerServiceWorker(retryCount = 3, delay = 2000) {
-      if ('serviceWorker' in navigator) {
-        for (let attempt = 1; attempt <= retryCount; attempt++) {
-          try {
-            const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
-            console.log(`✅ Service Worker registered (Attempt ${attempt}):`, registration);
-            await navigator.serviceWorker.ready;
-            console.log('✅ Service Worker is ready');
-            return;
-          } catch (error) {
-            console.error(`❌ Service Worker registration failed (Attempt ${attempt}):`, error);
-            if (attempt < retryCount) {
-              console.log(`🔄 Retrying in ${delay}ms...`);
-              await new Promise(res => setTimeout(res, delay));
-            }
-          }
-        }
-        console.error('🚨 Service Worker registration failed after all attempts.');
-      }
-    }
-
-    window.addEventListener('load', async function () {
-      await registerServiceWorker();
-      console.log("🚀 Starting Flutter...");
-
-      _flutter.loader.load({
-        serviceWorker: { serviceWorkerVersion: '"2505701147"' },
-        onLoad: function (engineInitializer) {
-          engineInitializer.initializeEngine({ renderer: "canvaskit" })
-            .then((appRunner) => {
-              removeSplashFromWeb(); // ✅ This is the missing call!
-              appRunner.runApp();
-            });
-        }
+    window.addEventListener('load', function () {
+      _flutter.loader.load().then((engine) => {
+        engine.initializeEngine().then((appRunner) => appRunner.runApp());
       });
     });
 </script>
