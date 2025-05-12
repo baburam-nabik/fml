@@ -1,17 +1,145 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <base href="/">-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta content="IE=Edge" http-equiv="X-UA-Compatible">-->
+<!--    <meta name="description" content="A new Flutter project.">-->
+
+<!--    &lt;!&ndash; iOS meta tags & icons &ndash;&gt;-->
+<!--    <meta name="apple-mobile-web-app-capable" content="yes">-->
+<!--    <meta name="apple-mobile-web-app-status-bar-style" content="black">-->
+<!--    <meta name="apple-mobile-web-app-title" content="fml_customer_web">-->
+<!--    <link rel="apple-touch-icon" href="icons/Icon-192.png">-->
+
+<!--    &lt;!&ndash; Favicon &ndash;&gt;-->
+<!--    <link rel="icon" type="image/png" href="favicon.png"/>-->
+
+<!--    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDICPC3V8tUyY8SZ9aCIJD8cw9Vox8EdSs&loading=async"></script>-->
+<!--    <title>fml_customer_web</title>-->
+<!--    <link rel="manifest" href="manifest.json">-->
+
+<!--    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>-->
+<!--    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>-->
+<!--    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>-->
+
+<!--    &lt;!&ndash; This script adds the Flutter initialization JS code &ndash;&gt;-->
+<!--    <script src="flutter.js" defer></script>-->
+
+<!--    <script>-->
+<!--        const firebaseConfig = {-->
+<!--            apiKey: "AIzaSyAK_1GcvSa0HzN1hOzpeKjmrEKWqyA3OxA",-->
+<!--            authDomain: "fmlapp-164308.firebaseapp.com",-->
+<!--            databaseURL: "https://fmlapp-164308.firebaseio.com",-->
+<!--            projectId: "fmlapp-164308",-->
+<!--            storageBucket: "fmlapp-164308.appspot.com",-->
+<!--            messagingSenderId: "191414083868",-->
+<!--            appId: "1:191414083868:web:3ff379f63efc397ed91ad9",-->
+<!--            measurementId: "G-CSPSGMKYY0"-->
+<!--        };-->
+
+<!--        // Initialize Firebase-->
+<!--        firebase.initializeApp(firebaseConfig);-->
+<!--        const messaging = firebase.messaging();-->
+
+<!--        // Request permission for push notifications-->
+<!--        function requestNotificationPermission() {-->
+<!--            return messaging.requestPermission()-->
+<!--                .then(() => {-->
+<!--                    console.log('Notification permission granted.');-->
+<!--                    return messaging.getToken({ vapidKey: 'YOUR_VAPID_KEY' });  // Replace with your actual VAPID key-->
+<!--                })-->
+<!--                .then((currentToken) => {-->
+<!--                    if (currentToken) {-->
+<!--                        console.log('Token:', currentToken);-->
+<!--                        // Send the token to your server-->
+<!--                    } else {-->
+<!--                        console.log('No registration token available. Request permission to generate one.');-->
+<!--                    }-->
+<!--                })-->
+<!--                .catch((err) => {-->
+<!--                    console.error('Unable to get permission to notify.', err);-->
+<!--                });-->
+<!--        }-->
+
+<!--        window.addEventListener('load', function () {-->
+<!--            // Register the service worker-->
+<!--            if ('serviceWorker' in navigator) {-->
+<!--                navigator.serviceWorker.register('/firebase-messaging-sw.js')-->
+<!--                    .then((registration) => {-->
+<!--                        console.log('Service Worker registered with scope:', registration.scope);-->
+<!--                        requestNotificationPermission();-->
+<!--                    })-->
+<!--                    .catch((error) => {-->
+<!--                        console.error('Service Worker registration failed:', error);-->
+<!--                    });-->
+<!--            }-->
+
+<!--            // Load Flutter app-->
+<!--            _flutter.loader.loadEntrypoint({-->
+<!--                serviceWorker: {-->
+<!--                    serviceWorkerVersion: null, // Leave as null or update if necessary-->
+<!--                },-->
+<!--                onEntrypointLoaded: function (engineInitializer) {-->
+<!--                    let config = {-->
+<!--                        renderer: "html",-->
+<!--                    };-->
+<!--                    engineInitializer.initializeEngine(config).then(function (appRunner) {-->
+<!--                        appRunner.runApp();-->
+<!--                    });-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+<!--    </script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
+    <base href="/">
     <meta charset="UTF-8">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta name="description" content="A new Flutter project.">
+    <!-- iOS meta tags & icons -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="FML-Food Music Love">
+    <link rel="apple-touch-icon" href="icons/Icon-192.png">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png"/>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDICPC3V8tUyY8SZ9aCIJD8cw9Vox8EdSs&libraries=places" async defer></script>
+    <title>FML-Food Music Love</title>
+    <link rel="manifest" href="manifest.json">
+    <script>const serviceWorkerVersion = "3380036901";</script>
     <script src="flutter.js" defer></script>
-    <title>Flutter Web Test</title>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <script>
-    window.addEventListener('load', function () {
-      _flutter.loader.load().then((engine) => {
-        engine.initializeEngine().then((appRunner) => appRunner.runApp());
+    let useHtml = true;
+
+    window.addEventListener('load', function(ev) {
+    _flutter.loader.loadEntrypoint({
+      serviceWorker: {
+        serviceWorkerVersion: serviceWorkerVersion,
+      },
+      onEntrypointLoaded: function(engineInitializer) {
+        let config = {
+          renderer: useHtml ? "html" : "canvaskit",
+        };
+        engineInitializer.initializeEngine(config).then(function(appRunner) {
+          appRunner.runApp();
+        });
+       }
       });
-    });
+     });
 </script>
+<script src="main.dart.js" type="application/javascript"></script>
 </body>
 </html>
