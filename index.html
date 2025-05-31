@@ -1,98 +1,77 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <base href="/">
-    <meta charset="UTF-8">
-    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-    <meta name="description" content="A new Flutter project.">
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAK_1GcvSa0HzN1hOzpeKjmrEKWqyA3OxA",
+        authDomain: "fmlapp-164308.firebaseapp.com",
+        databaseURL: "https://fmlapp-164308.firebaseio.com",
+        projectId: "fmlapp-164308",
+        storageBucket: "fmlapp-164308.appspot.com",
+        messagingSenderId: "191414083868",
+        appId: "1:191414083868:web:3ff379f63efc397ed91ad9",
+        measurementId: "G-CSPSGMKYY0"
+    };
 
-    <!-- iOS meta tags & icons -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="fml_customer_web">
-    <link rel="apple-touch-icon" href="icons/Icon-192.png">
+    function isMessagingSupported() {
+        return 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
+    }
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png"/>
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDICPC3V8tUyY8SZ9aCIJD8cw9Vox8EdSs&loading=async"></script>
-    <title>fml_customer_web</title>
-    <link rel="manifest" href="manifest.json">
+    let messaging;
+    if (isMessagingSupported()) {
+        try {
+            messaging = firebase.messaging();
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
+            function requestNotificationPermission() {
+                return messaging.requestPermission()
+                    .then(() => {
+                        console.log('✅ Notification permission granted.');
+                        return messaging.getToken({
+                            vapidKey: 'YOUR_PUBLIC_VAPID_KEY_HERE' // <- REQUIRED for web push
+                        });
+                    })
+                    .then((currentToken) => {
+                        if (currentToken) {
+                            console.log('🎯 FCM Token:', currentToken);
+                            // Send the token to your backend
+                        } else {
+                            console.warn('⚠️ No registration token available.');
+                        }
+                    })
+                    .catch((err) => {
+                        console.error('🚫 Error during permission/token request:', err);
+                    });
+            }
+        } catch (err) {
+            console.error("🚨 Messaging init error:", err);
+        }
+    } else {
+        console.warn("⚠️ Firebase Messaging is not supported in this browser.");
+    }
 
-    <!-- This script adds the Flutter initialization JS code -->
-    <script src="flutter.js" defer></script>
-
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyAK_1GcvSa0HzN1hOzpeKjmrEKWqyA3OxA",
-            authDomain: "fmlapp-164308.firebaseapp.com",
-            databaseURL: "https://fmlapp-164308.firebaseio.com",
-            projectId: "fmlapp-164308",
-            storageBucket: "fmlapp-164308.appspot.com",
-            messagingSenderId: "191414083868",
-            appId: "1:191414083868:web:3ff379f63efc397ed91ad9",
-            measurementId: "G-CSPSGMKYY0"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const messaging = firebase.messaging();
-
-        // Request permission for push notifications
-        function requestNotificationPermission() {
-            return messaging.requestPermission()
-                .then(() => {
-                    console.log('Notification permission granted.');
-<!--                    return messaging.getToken({ vapidKey: 'YOUR_VAPID_KEY' });  // Replace with your actual VAPID key-->
+    window.addEventListener('load', function () {
+        if (messaging && 'serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/firebase-messaging-sw.js')
+                .then((registration) => {
+                    console.log('✅ Service Worker registered:', registration.scope);
+                    messaging.useServiceWorker(registration);
+                    requestNotificationPermission();
                 })
-                .then((currentToken) => {
-                    if (currentToken) {
-                        console.log('Token:', currentToken);
-                        // Send the token to your server
-                    } else {
-                        console.log('No registration token available. Request permission to generate one.');
-                    }
-                })
-                .catch((err) => {
-                    console.error('Unable to get permission to notify.', err);
+                .catch((error) => {
+                    console.error('❌ SW registration failed:', error);
                 });
         }
 
-        window.addEventListener('load', function () {
-            // Register the service worker
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/firebase-messaging-sw.js')
-                    .then((registration) => {
-                        console.log('Service Worker registered with scope:', registration.scope);
-                        requestNotificationPermission();
-                    })
-                    .catch((error) => {
-                        console.error('Service Worker registration failed:', error);
-                    });
+        // Load Flutter app
+        _flutter.loader.loadEntrypoint({
+            serviceWorker: {
+                serviceWorkerVersion: null
+            },
+            onEntrypointLoaded: function (engineInitializer) {
+                engineInitializer.initializeEngine({ renderer: "html" }).then(function (appRunner) {
+                    appRunner.runApp();
+                });
             }
-
-            // Load Flutter app
-            _flutter.loader.loadEntrypoint({
-                serviceWorker: {
-                    serviceWorkerVersion: null, // Leave as null or update if necessary
-                },
-                onEntrypointLoaded: function (engineInitializer) {
-                    let config = {
-                        renderer: "html",
-                    };
-                    engineInitializer.initializeEngine(config).then(function (appRunner) {
-                        appRunner.runApp();
-                    });
-                }
-            });
         });
-    </script>
-</head>
-<body>
-<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
-</body>
-</html>
+    });
+</script>
