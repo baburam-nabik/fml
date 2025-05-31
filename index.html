@@ -24,19 +24,24 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
 
-    <!-- Flutter Web JS -->
+    <!-- Flutter JS -->
     <script src="flutter.js" defer></script>
 
-    <!-- Set Flutter build config -->
+    <!-- Correct Flutter buildConfig -->
     <script>
         window._flutter = window._flutter || {};
         _flutter.buildConfig = {
-          entrypointUrl: "main.dart.js"
+          builds: [
+            {
+              baseUrl: "./",
+              mainUri: "main.dart.js",
+              assetsBase: "assets/"
+            }
+          ]
         };
     </script>
 
     <script>
-        // Firebase Config
         const firebaseConfig = {
           apiKey: "AIzaSyAK_1GcvSa0HzN1hOzpeKjmrEKWqyA3OxA",
           authDomain: "fmlapp-164308.firebaseapp.com",
@@ -61,10 +66,9 @@
               const token = await messaging.getToken({
                 vapidKey: 'BD5l4A7btFUkfgjSd_K0Yz2BrYJd1nC5xfhrEHnXk7qTif74ltnPghIGe1tSR2ZhdCrQpV1DW8jGMl7t2lzZ73k'
               });
-
               if (token) {
                 console.log('🔑 FCM Token:', token);
-                // TODO: Send this token to your backend
+                // TODO: Send token to your server
               } else {
                 console.warn('⚠️ No token returned');
               }
@@ -81,12 +85,9 @@
           const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
           const loadFlutterApp = () => {
-            if (!_flutter.buildConfig) {
-              _flutter.buildConfig = { entrypointUrl: "main.dart.js" };
-            }
-
-            _flutter.loader.loadEntrypoint({
-              entrypointUrl: _flutter.buildConfig.entrypointUrl,
+            const config = _flutter.buildConfig;
+            _flutter.loader.load({
+              entrypointUrl: config.builds[0].mainUri,
               serviceWorker: {
                 serviceWorkerVersion: null,
               },
