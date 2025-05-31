@@ -86,14 +86,10 @@
           }
 
           // 🚀 Load Flutter App
-          _flutter.loader.loadEntrypoint({
-            serviceWorker: {
-              serviceWorkerVersion: null,
-            },
+          _flutter.loader.load({
             onEntrypointLoaded: function (engineInitializer) {
-              engineInitializer.initializeEngine().then(function (appRunner) {
-                appRunner.runApp();
-              });
+            const appRunner = await engineInitializer.initializeEngine();
+            await appRunner.runApp();
             }
           });
         });
