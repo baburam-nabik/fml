@@ -116,7 +116,7 @@
 <!--    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDICPC3V8tUyY8SZ9aCIJD8cw9Vox8EdSs&libraries=places" loading="async" defer></script>-->
 <!--    <title>FML-Food Music Love</title>-->
 <!--    <link rel="manifest" href="manifest.json">-->
-<!--    <script>const serviceWorkerVersion = "1808152127";</script>-->
+<!--    <script>const serviceWorkerVersion = "4078641114";</script>-->
 <!--    <script src="flutter.js" defer></script>-->
 <!--</head>-->
 <!--<body>-->
@@ -173,13 +173,11 @@
 </head>
 <body>
 <script>
-    async function registerServiceWorker(retryCount = 3, delay = 2000) {
+    async function registerServiceWorker(retryCount = 10, delay = 2000) {
         if ('serviceWorker' in navigator) {
             for (let attempt = 1; attempt <= retryCount; attempt++) {
                 try {
-<!--                    const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');-->
-                    const registration = await navigator.serviceWorker.register('flutter_service_worker.js?v=1808152127');
-
+                    const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
                     console.log(`✅ Service Worker registered (Attempt ${attempt}):`, registration);
                     await navigator.serviceWorker.ready;
                     console.log('✅ Service Worker is ready');
@@ -200,7 +198,7 @@
         await registerServiceWorker();
         console.log("🚀 Starting Flutter...");
         _flutter.loader.load({
-            serviceWorker: { serviceWorkerVersion: '"1808152127"' },
+            serviceWorker: { serviceWorkerVersion: '"4078641114"' },
             onLoad: function (engineInitializer) {
                 engineInitializer.initializeEngine({ renderer: "canvaskit" })
                     .then((appRunner) => appRunner.runApp());
