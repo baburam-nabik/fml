@@ -23,19 +23,19 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
 
-    <!-- Flutter engine -->
+    <!-- Flutter JS -->
     <script src="flutter.js" defer></script>
 
-    <!-- Flutter build config -->
+    <!-- Set Flutter build config -->
     <script>
         window._flutter = window._flutter || {};
         _flutter.buildConfig = {
-          entrypointUrl: "main.dart.js", // Make sure this matches your actual output file from Flutter build
+          entrypointUrl: "main.dart.js"
         };
     </script>
 
     <script>
-        // Firebase configuration
+        // Firebase config
         const firebaseConfig = {
           apiKey: "AIzaSyAK_1GcvSa0HzN1hOzpeKjmrEKWqyA3OxA",
           authDomain: "fmlapp-164308.firebaseapp.com",
@@ -57,22 +57,21 @@
             const permission = await Notification.requestPermission();
             if (permission === 'granted') {
               console.log('✅ Notification permission granted.');
-
               const token = await messaging.getToken({
                 vapidKey: 'BD5l4A7btFUkfgjSd_K0Yz2BrYJd1nC5xfhrEHnXk7qTif74ltnPghIGe1tSR2ZhdCrQpV1DW8jGMl7t2lzZ73k'
               });
 
               if (token) {
                 console.log('🔑 FCM Token:', token);
-                // TODO: Send token to your backend if needed
+                // TODO: Send token to your server
               } else {
-                console.warn('⚠️ No token returned from messaging.getToken');
+                console.warn('⚠️ No token returned');
               }
             } else {
               console.warn('❌ Notification permission not granted.');
             }
           } catch (err) {
-            console.error('❌ Error during permission/token request:', err);
+            console.error('❌ Error getting FCM token:', err);
           }
         }
 
@@ -87,14 +86,15 @@
 
               await requestFCMPermissionAndToken();
             } catch (error) {
-              console.error('❌ SW registration or messaging setup failed:', error);
+              console.error('❌ Error setting up FCM:', error);
             }
           } else {
-            console.warn("❗ Browser does not support Push Notifications.");
+            console.warn("❗ Browser does not support notifications.");
           }
 
-          // 🚀 Load Flutter Web App
-          _flutter.loader.load({
+          // Load Flutter web app
+          _flutter.loader.loadEntrypoint({
+            entrypointUrl: _flutter.buildConfig.entrypointUrl,
             serviceWorker: {
               serviceWorkerVersion: null,
             },
