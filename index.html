@@ -7,10 +7,9 @@
     <meta name="description" content="Flutter Web App with FCM" />
 
     <!-- iOS meta tags -->
-    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-title" content="fml_customer_web" />
+    <meta name="apple-mobile-web-app-title" content="flutter_fcm_web" />
     <link rel="apple-touch-icon" href="icons/Icon-192.png" />
 
     <!-- Favicon -->
@@ -24,19 +23,11 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
 
-    <!-- Flutter JS -->
+    <!-- Flutter SDK -->
     <script src="flutter.js" defer></script>
 
-    <!-- Set Flutter build config -->
     <script>
-        window._flutter = window._flutter || {};
-        _flutter.buildConfig = {
-          entrypointUrl: "main.dart.js"
-        };
-    </script>
-
-    <script>
-        // Firebase config
+        // ✅ Firebase config
         const firebaseConfig = {
           apiKey: "AIzaSyAK_1GcvSa0HzN1hOzpeKjmrEKWqyA3OxA",
           authDomain: "fmlapp-164308.firebaseapp.com",
@@ -48,23 +39,26 @@
           measurementId: "G-CSPSGMKYY0"
         };
 
+        // ✅ Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         firebase.analytics();
 
         let messaging;
 
+        // ✅ Request FCM token and permissions
         async function requestFCMPermissionAndToken() {
           try {
             const permission = await Notification.requestPermission();
             if (permission === 'granted') {
               console.log('✅ Notification permission granted.');
+
               const token = await messaging.getToken({
-                vapidKey: 'BD5l4A7btFUkfgjSd_K0Yz2BrYJd1nC5xfhrEHnXk7qTif74ltnPghIGe1tSR2ZhdCrQpV1DW8jGMl7t2lzZ73k'
+                vapidKey: 'BD5l4A7btFUkfgjSd_K0Yz2BrYJd1nC5xfhrEHnXk7qTif74ltnPghIGe1tSR2ZhdCrQpV1DW8jGMl7t2lzZ73k' // Replace with your VAPID key
               });
 
               if (token) {
                 console.log('🔑 FCM Token:', token);
-                // TODO: Send token to your server
+                // ✅ Send token to your server
               } else {
                 console.warn('⚠️ No token returned');
               }
@@ -72,11 +66,24 @@
               console.warn('❌ Notification permission not granted.');
             }
           } catch (err) {
-            console.error('❌ Error getting FCM token:', err);
+            console.error('❌ Error getting token:', err);
           }
         }
 
+        // ✅ Check if browser is Safari on iOS
+        function isIOS() {
+          return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        }
+
+        function isSafari() {
+          return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        }
+
         window.addEventListener('load', async () => {
+          if (isIOS() && isSafari()) {
+            alert('❗ Push Notifications are not supported on iOS Safari. Please install our app or use a different browser.');
+          }
+
           if ('serviceWorker' in navigator && 'PushManager' in window) {
             try {
               const registration = await navigator.serviceWorker.register('firebase-messaging-sw.js');
@@ -86,16 +93,19 @@
               messaging.useServiceWorker(registration);
 
               await requestFCMPermissionAndToken();
-            } catch (error) {
-              console.error('❌ Error setting up FCM:', error);
+            } catch (err) {
+              console.error('❌ Failed to register SW or get FCM token:', err);
             }
           } else {
-            console.warn("❗ Browser does not support notifications.");
+            console.warn('❗ Browser does not support notifications.');
           }
 
-          // Load Flutter web app
-          _flutter.loader.loadEntrypoint({
-            entrypointUrl: _flutter.buildConfig.entrypointUrl,
+          // ✅ Load Flutter app
+          if (!_flutter.buildConfig) {
+            _flutter.buildConfig = {}; // Fix error: _flutter.buildConfig must be set
+          }
+
+          _flutter.loader.load({
             serviceWorker: {
               serviceWorkerVersion: null,
             },
