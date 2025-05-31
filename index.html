@@ -116,7 +116,7 @@
 <!--    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDICPC3V8tUyY8SZ9aCIJD8cw9Vox8EdSs&libraries=places" loading="async" defer></script>-->
 <!--    <title>FML-Food Music Love</title>-->
 <!--    <link rel="manifest" href="manifest.json">-->
-<!--    <script>const serviceWorkerVersion = "86820244";</script>-->
+<!--    <script>const serviceWorkerVersion = "1987825701";</script>-->
 <!--    <script src="flutter.js" defer></script>-->
 <!--</head>-->
 <!--<body>-->
@@ -198,9 +198,9 @@
         await registerServiceWorker();
         console.log("🚀 Starting Flutter...");
         _flutter.loader.load({
-            serviceWorker: { serviceWorkerVersion: '"86820244"' },
+            serviceWorker: { serviceWorkerVersion: '"1987825701"' },
             onLoad: function (engineInitializer) {
-                engineInitializer.initializeEngine({ renderer: "html" })
+                engineInitializer.initializeEngine({ renderer: "canvaskit" })
                     .then((appRunner) => appRunner.runApp());
             }
         });
