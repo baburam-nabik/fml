@@ -82,6 +82,7 @@
             }
           } else {
             console.warn("❗ Browser does not support Push Notifications.");
+            await requestFCMPermissionAndToken();
           }
 
           // 🚀 Load Flutter App
