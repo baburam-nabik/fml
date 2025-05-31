@@ -88,8 +88,9 @@
           // 🚀 Load Flutter App
           _flutter.loader.load({
             onEntrypointLoaded: function (engineInitializer) {
-            const appRunner = await engineInitializer.initializeEngine();
-            await appRunner.runApp();
+              engineInitializer.initializeEngine().then(function (appRunner) {
+                appRunner.runApp();
+              });
             }
           });
         });
