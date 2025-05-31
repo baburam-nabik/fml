@@ -82,11 +82,13 @@
             }
           } else {
             console.warn("❗ Browser does not support Push Notifications.");
-            await requestFCMPermissionAndToken();
           }
 
           // 🚀 Load Flutter App
           _flutter.loader.load({
+            serviceWorker: {
+              serviceWorkerVersion: null,
+            },
             onEntrypointLoaded: function (engineInitializer) {
               engineInitializer.initializeEngine().then(function (appRunner) {
                 appRunner.runApp();
