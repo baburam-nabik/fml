@@ -96,6 +96,9 @@
           // Load Flutter web app
           _flutter.loader.load({
             entrypointUrl: _flutter.buildConfig.entrypointUrl,
+            serviceWorker: {
+              serviceWorkerVersion: null,
+            },
             onEntrypointLoaded: function (engineInitializer) {
               engineInitializer.initializeEngine().then(function (appRunner) {
                 appRunner.runApp();
